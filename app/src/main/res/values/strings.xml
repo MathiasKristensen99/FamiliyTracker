@@ -5,5 +5,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string name="newFMember">New Family Member</string>
+    <string name="exit_menu_text">Exit</string>
     <string name="title_activity_maps">MapsActivity</string>
 </resources>
