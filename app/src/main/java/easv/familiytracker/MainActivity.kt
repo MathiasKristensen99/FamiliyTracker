@@ -11,6 +11,7 @@ import easv.familiytracker.repository.FMembersRepository
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         val adapter = FMemberAdapter(this, FMembersRepository().getAll())
