@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.FamiliyTracker.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.FamiliyTracker.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgView"
+        android:src="@drawable/face"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filename..."
+        android:id="@+id/tvImageInfo"
+        android:layout_above="@id/btnByFile"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/btnByFile"
+        android:onClick="onTakeByFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take as File"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:id="@+id/btnBitmap"
+        android:onClick="onTakeByBitmap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take as Bitmap"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
