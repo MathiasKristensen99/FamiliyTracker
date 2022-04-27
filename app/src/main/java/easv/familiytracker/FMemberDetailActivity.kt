@@ -88,7 +88,7 @@ class FMemberDetailActivity : AppCompatActivity() {
     }
 
     fun onTakeByFile(view: View) {
-        mFile = getOutputMediaFile("Camera01") // create a file to save the image
+        mFile = getOutputMediaFile("family_tracker") // create a file to save the image
 
         if (mFile == null) {
             Toast.makeText(this, "Could not create file...", Toast.LENGTH_LONG).show()

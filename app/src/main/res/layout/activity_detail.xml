@@ -18,7 +18,7 @@
         android:id="@+id/imgFilePath"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -70,6 +70,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save" />
+
+        <Button
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"/>
 
         <Button
             android:id="@+id/btnDelete"
