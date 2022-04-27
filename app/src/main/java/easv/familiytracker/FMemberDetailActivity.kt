@@ -128,20 +128,8 @@ class FMemberDetailActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val profilePic = findViewById<ImageView>(R.id.imgProfilePic)
-        val tvImageInfo = findViewById<TextView>(R.id.imgFilePath)
         when (requestCode) {
 
-            CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE ->
-                if (resultCode == RESULT_OK)
-                    showImageFromFile(profilePic, tvImageInfo, mFile!!)
-                else handleOther(resultCode)
-
-            CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP ->
-                if (resultCode == RESULT_OK) {
-                    val extras = data!!.extras
-                    val imageBitmap = extras!!["data"] as Bitmap
-                    showImageFromBitmap(profilePic, tvImageInfo, imageBitmap)
-                } else handleOther(resultCode)
         }
     }
 }
