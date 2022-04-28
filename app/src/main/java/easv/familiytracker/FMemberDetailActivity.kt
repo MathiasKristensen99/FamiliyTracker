@@ -37,7 +37,16 @@ class FMemberDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        val FMNameEditText = findViewById<EditText>(R.id.FamilyMemberName)
+        val FMPhoneNumberEditText = findViewById<EditText>(R.id.FamilyMemberPhone)
+        val FMName = intent.getStringExtra("Extra_Name").toString()
+        val FMPhone = intent.getStringExtra("Extra_Phone").toString()
         val btnSave = findViewById<Button>(R.id.SaveFamilyMemberButton)
+        val btnBack = findViewById<Button>(R.id.GoBackButton)
+        //Sets Name and Phone Number.
+        setFMValues(FMNameEditText, FMName, FMPhoneNumberEditText, FMPhone)
+
+        btnBack.setOnClickListener(){finish()}
 
         btnSave.setOnClickListener {
             val task = Thread(
@@ -48,6 +57,13 @@ class FMemberDetailActivity : AppCompatActivity() {
             task.start()
         }
         checkPermissions()
+
+
+    }
+    //Method that sets Name and Phone Number.
+    private fun setFMValues(editTextName: EditText, name :String, editTextPhone:EditText, phone :String){
+        editTextName.setText(name)
+        editTextPhone.setText(phone)
     }
 
     private fun checkPermissions() {

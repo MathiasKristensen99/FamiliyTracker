@@ -54,7 +54,16 @@ class MainActivity : AppCompatActivity() {
         val lvFMembers = this.findViewById<ListView>(R.id.lvFMembers)
         lvFMembers.adapter = adapter
         lvFMembers.setOnItemClickListener { adapterView, view, position, id ->
+
+
+            val familyMemberName = adapter.getItem(id.toInt())?.name
+            val familyMemberPhone = adapter.getItem(id.toInt())?.phone
+            val FMIBundle = Bundle()
+            FMIBundle.putString("Extra_Name" , familyMemberName.toString())
+            FMIBundle.putString("Extra_Phone", familyMemberPhone.toString())
+
             val i = Intent(this, FMemberDetailActivity::class.java)
+            i.putExtras(FMIBundle)
             startActivity(i)
         }
     }
