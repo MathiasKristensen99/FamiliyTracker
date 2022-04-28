@@ -1,6 +1,10 @@
 package easv.familiytracker.repository
 
 import android.util.Log
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.extensions.jsonBody
+import com.github.kittinunf.fuel.httpPost
+import com.google.gson.Gson
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
@@ -10,11 +14,14 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
+
 class FamilyMembersDB {
 
     private val url = "https://familytracker.azurewebsites.net/api/FamilyMembers"
 
     private val httpClient : AsyncHttpClient = AsyncHttpClient()
+
+    data class FamilyMember(var id: String, var name: String, var phone: String, var picture: String, var location: String)
 
     fun getAll(callback: ICallback) {
         httpClient.get(url, object : AsyncHttpResponseHandler() {
@@ -35,8 +42,14 @@ class FamilyMembersDB {
             ) {
                 Log.d(MainActivity.TAG, "failure in getAll statusCode = $statusCode")
             }
-
         })
+    }
+
+    fun createMember(name: String, phone: String, picture: String, location: String) {
+        val familyMember = FamilyMember("", name, phone, picture, location)
+
+        val (_, _, result) = url.httpPost().jsonBody(Gson().toJson(familyMember).toString()).responseString()
+        println(result)
     }
 
     private fun getMembersFromString(jsonString: String?): List<BEFMember> {
@@ -61,5 +74,4 @@ class FamilyMembersDB {
         }
         return result
     }
-
 }

@@ -12,12 +12,12 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
+import easv.familiytracker.models.BEFMember
+import easv.familiytracker.repository.FamilyMembersDB
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,11 +30,23 @@ class FMemberDetailActivity : AppCompatActivity() {
     val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 102
 
     var mFile: File? = null
+    val db = FamilyMembersDB()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        val btnSave = findViewById<Button>(R.id.SaveFamilyMemberButton)
+
+        btnSave.setOnClickListener {
+            val task = Thread(
+                Runnable {
+                    saveMember()
+                }
+            )
+            task.start()
+        }
         checkPermissions()
     }
 
@@ -49,6 +61,13 @@ class FMemberDetailActivity : AppCompatActivity() {
 
     private fun isGranted(permission: String): Boolean =
         ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+
+    private fun saveMember() {
+        val txtName = findViewById<EditText>(R.id.FamilyMemberName)
+        val txtPhone = findViewById<EditText>(R.id.FamilyMemberPhone)
+
+        db.createMember(txtName.text.toString(), txtPhone.text.toString(), "", "")
+    }
 
     private fun getOutputMediaFile(folder: String): File? {
         // in an emulated device you can see the external files in /sdcard/Android/data/<your app>.
