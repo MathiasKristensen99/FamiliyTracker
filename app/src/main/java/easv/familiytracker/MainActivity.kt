@@ -16,13 +16,22 @@ class MainActivity : AppCompatActivity() {
         val TAG = "xyz"
     }
 
+    val db = FamilyMembersDB()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-
-        val db = FamilyMembersDB()
         //val adapter = FMemberAdapter(this, FMembersRepository().getAll())
+        db.getAll(object:ICallback{
+            override fun familyMembers(members: List<BEFMember>) {
+                setupListView(members)
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
         db.getAll(object:ICallback{
             override fun familyMembers(members: List<BEFMember>) {
                 setupListView(members)

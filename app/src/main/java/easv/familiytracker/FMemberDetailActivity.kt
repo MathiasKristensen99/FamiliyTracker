@@ -67,6 +67,7 @@ class FMemberDetailActivity : AppCompatActivity() {
         val txtPhone = findViewById<EditText>(R.id.FamilyMemberPhone)
 
         db.createMember(txtName.text.toString(), txtPhone.text.toString(), "", "")
+        finish()
     }
 
     private fun getOutputMediaFile(folder: String): File? {
