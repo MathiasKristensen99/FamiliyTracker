@@ -4,6 +4,7 @@ import android.util.Log
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.fuel.httpPut
 import com.google.gson.Gson
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
@@ -49,6 +50,13 @@ class FamilyMembersDB {
         val familyMember = FamilyMember("", name, phone, picture, location)
 
         val (_, _, result) = url.httpPost().jsonBody(Gson().toJson(familyMember).toString()).responseString()
+        println(result)
+    }
+
+    fun updateMember(id: String, name: String, phone: String, picture: String, location: String) {
+        val familyMember = FamilyMember(id, name, phone, picture, location)
+
+        val (_, _, result) = "https://familytracker.azurewebsites.net/api/FamilyMembers/$id".httpPut().jsonBody(Gson().toJson(familyMember).toString()).responseString()
         println(result)
     }
 

@@ -41,6 +41,7 @@ class FMemberDetailActivity : AppCompatActivity() {
         val FMPhoneNumberEditText = findViewById<EditText>(R.id.FamilyMemberPhone)
         val FMName = intent.getStringExtra("Extra_Name").toString()
         val FMPhone = intent.getStringExtra("Extra_Phone").toString()
+        val FMId = intent.getStringExtra("Extra_Id").toString()
         val btnSave = findViewById<Button>(R.id.SaveFamilyMemberButton)
         val btnBack = findViewById<Button>(R.id.GoBackButton)
         //Sets Name and Phone Number.
