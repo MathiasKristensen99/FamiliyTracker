@@ -59,24 +59,9 @@ class EditFamilyMemberActivity: AppCompatActivity() {
             task.start()
         }
 
-
-/*        if(isEditMode) {
-            val getOneObserver = Observer<BEFMember>{ familyMember ->
-                if(isEditMode) {
-                    editFamilyMemberObject = familyMember
-                    val img = familyMember.picture
-                    if(img.isNotEmpty())
-                        FamilyMemberImage.setImageBitmap(StringToBitMap(img))
-
-                    FamilyMemberName.setText(familyMember.name)
-                    FamilyMemberPhone.setText(familyMember.phone)
-                }
-            }
-
-            familyMembers.getFamilyMemberById(editFamilyMemberId).observe(this, getOneObserver)
-        }
-*/
     }
+
+
 
     private fun setFMValues(editTextName: EditText, name :String, editTextPhone:EditText, phone :String){
         editTextName.setText(name)

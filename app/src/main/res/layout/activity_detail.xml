@@ -60,6 +60,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.7"
                 android:layout_height="150dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 android:src="@drawable/defaultpic"
                 />
 
@@ -68,7 +70,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.3"
                 android:layout_height="75dp"
-                android:text="Take Photo" />
+                android:text="Take Photo"
+                android:onClick="takeByBitmap"/>
 
         </LinearLayout>
 
