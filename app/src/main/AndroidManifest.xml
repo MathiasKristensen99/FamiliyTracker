@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-feature
@@ -43,6 +44,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".FMemberDetailActivity"
+            android:exported="false">
+        </activity>
+        <activity android:name=".EditFamilyMemberActivity"
             android:exported="false">
         </activity>
         <meta-data

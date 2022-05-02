@@ -6,22 +6,37 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ListView
-import easv.familiytracker.repository.FMembersRepository
+import easv.familiytracker.models.BEFMember
+import easv.familiytracker.repository.FamilyMembersDB
+import easv.familiytracker.repository.ICallback
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        val TAG = "xyz"
+    }
+
+    val db = FamilyMembersDB()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+        //val adapter = FMemberAdapter(this, FMembersRepository().getAll())
+        db.getAll(object:ICallback{
+            override fun familyMembers(members: List<BEFMember>) {
+                setupListView(members)
+            }
+        })
+    }
 
-        val adapter = FMemberAdapter(this, FMembersRepository().getAll())
-
-        val lvFMembers = this.findViewById<ListView>(R.id.lvFMembers)
-        lvFMembers.adapter = adapter
-        lvFMembers.setOnItemClickListener { adapterView, view, position, id ->
-            val i = Intent(this, FMemberDetailActivity::class.java)
-            startActivity(i)
-        }
+    override fun onResume() {
+        super.onResume()
+        db.getAll(object:ICallback{
+            override fun familyMembers(members: List<BEFMember>) {
+                setupListView(members)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -32,5 +47,26 @@ class MainActivity : AppCompatActivity() {
     fun newFMember(item: MenuItem) {
         val intent = Intent(this, FMemberDetailActivity::class.java)
         startActivity(intent)
+    }
+
+    fun setupListView(members: List<BEFMember>) {
+        val adapter = FMemberAdapter(this, members.toTypedArray())
+        val lvFMembers = this.findViewById<ListView>(R.id.lvFMembers)
+        lvFMembers.adapter = adapter
+        lvFMembers.setOnItemClickListener { adapterView, view, position, id ->
+
+
+            val familyMemberId = adapter.getItem(id.toInt())?.id
+            val familyMemberName = adapter.getItem(id.toInt())?.name
+            val familyMemberPhone = adapter.getItem(id.toInt())?.phone
+            val FMIBundle = Bundle()
+            FMIBundle.putString("Extra_Name", familyMemberName.toString())
+            FMIBundle.putString("Extra_Phone", familyMemberPhone.toString())
+            FMIBundle.putString("Extra_Id", familyMemberId.toString())
+
+            val i = Intent(this, EditFamilyMemberActivity::class.java)
+            i.putExtras(FMIBundle)
+            startActivity(i)
+        }
     }
 }
