@@ -46,7 +46,7 @@ class FMemberDetailActivity : AppCompatActivity() {
         val btnBack = findViewById<Button>(R.id.GoBackButton)
         val btnDelete = findViewById<Button>(R.id.DeleteFamilyMemberButton)
         //Sets Name and Phone Number.
-        setFMValues(FMNameEditText, FMName, FMPhoneNumberEditText, FMPhone)
+        //setFMValues(FMNameEditText, FMName, FMPhoneNumberEditText, FMPhone)
 
         btnBack.setOnClickListener(){finish()}
 
@@ -169,5 +169,6 @@ class FMemberDetailActivity : AppCompatActivity() {
         when (requestCode) {
 
         }
+
     }
 }

@@ -42,7 +42,7 @@ class PersonLocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         val secret = LatLng(55.465, 8.44995)
-        mMap.addMarker(MarkerOptions().position(secret).title("Marker in Sydney"))
+        mMap.addMarker(MarkerOptions().position(secret).title("Marker in Esbjerg"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(secret))
     }
 }

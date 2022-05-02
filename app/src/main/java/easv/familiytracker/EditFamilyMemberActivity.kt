@@ -34,6 +34,8 @@ class EditFamilyMemberActivity: AppCompatActivity() {
 
     val db = FamilyMembersDB()
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
@@ -45,11 +47,16 @@ class EditFamilyMemberActivity: AppCompatActivity() {
 
         val btnSave = findViewById<Button>(R.id.SaveFamilyMemberButton)
         val btnBack = findViewById<Button>(R.id.GoBackButton)
+        val btnCall = findViewById<Button>(R.id.FamilyMemberCallButton)
+        val btnSMS = findViewById<Button>(R.id.FamilyMemberSMSButton)
 
         val FMNameEditText = findViewById<EditText>(R.id.FamilyMemberName)
         val FMPhoneNumberEditText = findViewById<EditText>(R.id.FamilyMemberPhone)
         setFMValues(FMNameEditText, FMName, FMPhoneNumberEditText, FMPhone)
 
+        btnSMS.setOnClickListener { sendSMS() }
+        btnBack.setOnClickListener { finish() }
+        btnCall.setOnClickListener { openDialer() }
         btnSave.setOnClickListener {
             val task = Thread(
                 Runnable {
@@ -58,10 +65,7 @@ class EditFamilyMemberActivity: AppCompatActivity() {
             )
             task.start()
         }
-
     }
-
-
 
     private fun setFMValues(editTextName: EditText, name :String, editTextPhone:EditText, phone :String){
         editTextName.setText(name)
@@ -75,5 +79,19 @@ class EditFamilyMemberActivity: AppCompatActivity() {
 
         db.updateMember(FMId, FMNameEditText.text.toString(), FMPhoneNumberEditText.text.toString(), "", "")
         finish()
+    }
+
+    private fun openDialer() {
+        val FMPhone = intent.getStringExtra("Extra_Phone").toString()
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:$FMPhone")
+        startActivity(intent)
+    }
+
+    private fun sendSMS() {
+        val FMPhone = intent.getStringExtra("Extra_Phone").toString()
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("smsto:$FMPhone")
+        startActivity(intent)
     }
 }
