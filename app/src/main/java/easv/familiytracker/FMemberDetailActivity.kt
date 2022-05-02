@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -45,7 +46,7 @@ class FMemberDetailActivity : AppCompatActivity() {
 
 
         //Sets Name and Phone Number.
-        setFMValues(FMNameEditText, FMName, FMPhoneNumberEditText, FMPhone)
+        //setFMValues(FMNameEditText, FMName, FMPhoneNumberEditText, FMPhone)
 
         btnBack.setOnClickListener(){finish()}
 
@@ -173,4 +174,5 @@ class FMemberDetailActivity : AppCompatActivity() {
                 } else handleOther(resultCode)
         }
         }
+
     }
