@@ -44,11 +44,15 @@ class EditFamilyMemberActivity: AppCompatActivity() {
 
         val FMName = intent.getStringExtra("Extra_Name").toString()
         val FMPhone = intent.getStringExtra("Extra_Phone").toString()
+        val FMId = intent.getStringExtra("Extra_Id").toString()
+
+        val currentFM = FamilyMembersDB.FamilyMember(FMId, FMName, FMPhone, "", "")
 
         val btnSave = findViewById<Button>(R.id.SaveFamilyMemberButton)
         val btnBack = findViewById<Button>(R.id.GoBackButton)
         val btnCall = findViewById<Button>(R.id.FamilyMemberCallButton)
         val btnSMS = findViewById<Button>(R.id.FamilyMemberSMSButton)
+        val btnDelete = findViewById<Button>(R.id.DeleteFamilyMemberButton)
 
         val FMNameEditText = findViewById<EditText>(R.id.FamilyMemberName)
         val FMPhoneNumberEditText = findViewById<EditText>(R.id.FamilyMemberPhone)
@@ -65,6 +69,24 @@ class EditFamilyMemberActivity: AppCompatActivity() {
             )
             task.start()
         }
+
+        btnDelete.setOnClickListener{
+            val task = Thread(
+                Runnable{
+                    deleteMemberById(FMId, FMName, FMPhone)
+                }
+            )
+            task.start()
+        }
+
+
+
+
+    }
+
+    fun deleteMemberById(id : String, name : String, phone : String){
+        db.deleteMember(id, name, phone, "", "")
+        finish()
     }
 
     private fun setFMValues(editTextName: EditText, name :String, editTextPhone:EditText, phone :String){
