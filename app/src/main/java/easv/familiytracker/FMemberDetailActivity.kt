@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -25,7 +26,10 @@ class FMemberDetailActivity : AppCompatActivity() {
 
     val TAG = "xyz"
     private val PERMISSION_REQUEST_CODE = 1
+    val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE = 101
     val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 102
+
+    var mFile: File? = null
 
     val db = FamilyMembersDB()
 
@@ -35,11 +39,12 @@ class FMemberDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
 
 
-        val FMNameEditText = findViewById<EditText>(R.id.FamilyMemberName)
+      /*  val FMNameEditText = findViewById<EditText>(R.id.FamilyMemberName)
         val FMPhoneNumberEditText = findViewById<EditText>(R.id.FamilyMemberPhone)
         val FMName = intent.getStringExtra("Extra_Name").toString()
         val FMPhone = intent.getStringExtra("Extra_Phone").toString()
         val FMId = intent.getStringExtra("Extra_Id").toString()
+       */
         val btnSave = findViewById<Button>(R.id.SaveFamilyMemberButton)
         val btnBack = findViewById<Button>(R.id.GoBackButton)
 
@@ -60,30 +65,40 @@ class FMemberDetailActivity : AppCompatActivity() {
             task.start()
         }
         checkPermissions()
-
-
     }
 
+    fun onTakeByFile(view: View) {
+        mFile = getOutputMediaFile("family_tracker") // create a file to save the image
 
-    fun takeByBitmap(view: View) {
+        if (mFile == null) {
+            Toast.makeText(this, "Could not create file...", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        // create Intent to take a picture
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        //startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP)
-        bitmapCallback.launch(intent)
-    }
 
-    val bitmapCallback = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ){ activityResult ->
-        val mImage = findViewById<ImageView>(R.id.FamilyMemberImage)
-        if (activityResult.resultCode == RESULT_OK) {
-            val extras = activityResult.data!!.extras
-            val imageBitmap = extras!!["data"] as Bitmap
-            showImageFromBitmap(mImage, imageBitmap)
-        } else handleOther(activityResult.resultCode)
+        // Add extra to inform the app where to put the image.
+        val applicationId = "easv.familiytracker"
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(
+            this,
+            "${applicationId}.provider",  //use your app signature + ".provider"
+            mFile!!))
+
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE)
+
     }
 
 
-    private fun showImageFromBitmap(img: ImageView, bmap: Bitmap) {
+    fun onTakeByBitmap(view: View) {
+        if (isGranted(Manifest.permission.CAMERA)) {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP)
+        }
+    }
+
+
+    private fun showImageFromBitmap(img: ImageView, txt: TextView, bmap: Bitmap) {
         img.setImageBitmap(bmap)
         //img.setLayoutParams(RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         img.setBackgroundColor(Color.RED)
@@ -108,9 +123,13 @@ class FMemberDetailActivity : AppCompatActivity() {
     private fun isGranted(permission: String): Boolean =
         ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
+
+
+
     private fun saveMember() {
         val txtName = findViewById<EditText>(R.id.FamilyMemberName)
         val txtPhone = findViewById<EditText>(R.id.FamilyMemberPhone)
+
 
         db.createMember(txtName.text.toString(), txtPhone.text.toString(), "", "")
         finish()
@@ -136,25 +155,6 @@ class FMemberDetailActivity : AppCompatActivity() {
                 "_" + timeStamp + "." + postfix)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        var cameraGranted = true
-        var fileGranted = true
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            for (i in 0..permissions.size - 1) {
-                if (permissions[i] == Manifest.permission.CAMERA && grantResults[i] == PackageManager.PERMISSION_DENIED)
-                    cameraGranted = false
-                if (permissions[i] == Manifest.permission.WRITE_EXTERNAL_STORAGE && grantResults[i] == PackageManager.PERMISSION_DENIED)
-                    fileGranted = false
-            }
-        }
-        if (!cameraGranted) {
-            val btnByBitmap = findViewById<Button>(R.id.TakeImageButton)
-            btnByBitmap.isEnabled = false;
-        }
-    }
-
     private fun handleOther(resultCode: Int) {
         if (resultCode == RESULT_CANCELED)
             Toast.makeText(this, "Canceled...", Toast.LENGTH_LONG).show()
@@ -163,15 +163,30 @@ class FMemberDetailActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val profilePic = findViewById<ImageView>(R.id.FamilyMemberImage)
+        val mImage = findViewById<ImageView>(R.id.FamilyMemberImage)
+        val tvImageInfo = findViewById<TextView>(R.id.tvImageInfo)
         when (requestCode) {
+
+            CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE ->
+                if (resultCode == RESULT_OK)
+                    showImageFromFile(mImage, tvImageInfo, mFile!!)
+                else handleOther(resultCode)
+
             CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP ->
                 if (resultCode == RESULT_OK) {
                     val extras = data!!.extras
                     val imageBitmap = extras!!["data"] as Bitmap
-                    showImageFromBitmap(profilePic, imageBitmap)
+                    showImageFromBitmap(mImage, tvImageInfo, imageBitmap)
                 } else handleOther(resultCode)
         }
-        }
+    }
+
+    private fun showImageFromFile(img: ImageView, txt: TextView, f: File) {
+        img.setImageURI(Uri.fromFile(f))
+        img.setBackgroundColor(Color.RED)
+        //mImage.setRotation(90);
+        txt.text = "File at:" + f.absolutePath + " - size = " + f.length()
 
     }
+
+}
