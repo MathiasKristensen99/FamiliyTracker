@@ -45,6 +45,7 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         val FMName = intent.getStringExtra("Extra_Name").toString()
         val FMPhone = intent.getStringExtra("Extra_Phone").toString()
         val FMId = intent.getStringExtra("Extra_Id").toString()
+        val FMLatLong = intent.getStringExtra("Extra_location").toString()
 
         val currentFM = FamilyMembersDB.FamilyMember(FMId, FMName, FMPhone, "", "")
 
@@ -53,6 +54,7 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         val btnCall = findViewById<Button>(R.id.FamilyMemberCallButton)
         val btnSMS = findViewById<Button>(R.id.FamilyMemberSMSButton)
         val btnDelete = findViewById<Button>(R.id.DeleteFamilyMemberButton)
+        val btnLocation = findViewById<Button>(R.id.FamilyMemberLocationButton)
 
         val FMNameEditText = findViewById<EditText>(R.id.FamilyMemberName)
         val FMPhoneNumberEditText = findViewById<EditText>(R.id.FamilyMemberPhone)
@@ -61,6 +63,7 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         btnSMS.setOnClickListener { sendSMS() }
         btnBack.setOnClickListener { finish() }
         btnCall.setOnClickListener { openDialer() }
+        btnLocation.setOnClickListener { (seeFMLocation(FMName, FMLatLong)) }
         btnSave.setOnClickListener {
             val task = Thread(
                 Runnable {
@@ -79,9 +82,15 @@ class EditFamilyMemberActivity: AppCompatActivity() {
             task.start()
         }
 
+    }
+    fun seeFMLocation(fMName : String, latLong : String){
+        val FMBundle = Bundle()
+        FMBundle.putString("Extra_Name", fMName)
+        FMBundle.putString("Extra_latLong", latLong)
 
-
-
+        val i = Intent(this,PersonLocationActivity::class.java)
+        i.putExtras(FMBundle)
+        startActivity(i)
     }
 
     fun deleteMemberById(id : String, name : String, phone : String){

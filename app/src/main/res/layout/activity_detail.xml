@@ -133,6 +133,7 @@
             android:layout_marginEnd="15dp" />
 
         <Button
+            android:id="@+id/FamilyMemberLocationButton"
             android:layout_width="110dp"
             android:layout_height="75dp"
             android:text="Location"/>

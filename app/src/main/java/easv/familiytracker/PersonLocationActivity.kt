@@ -10,6 +10,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import easv.familiytracker.databinding.ActivityMapsBinding
+import java.lang.Double.parseDouble
 
 class PersonLocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -18,6 +19,9 @@ class PersonLocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -39,10 +43,16 @@ class PersonLocationActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        val FMName = intent.getStringExtra("Extra_Name").toString()
+        val FMLatLong = intent.getStringExtra("Extra_latLong").toString()
+        var latLong = FMLatLong.split(',')
+        var latitude = parseDouble(latLong[0])
+        val longitude = parseDouble(latLong[1])
+        println("${latitude + longitude}")
 
         // Add a marker in Sydney and move the camera
-        val secret = LatLng(55.465, 8.44995)
-        mMap.addMarker(MarkerOptions().position(secret).title("Marker in Esbjerg"))
+        val secret = LatLng(latitude, longitude)
+        mMap.addMarker(MarkerOptions().position(secret).title("${FMName}'s location."))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(secret))
     }
 }
