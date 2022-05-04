@@ -31,6 +31,11 @@ class EditFamilyMemberActivity: AppCompatActivity() {
     var editFamilyMemberId: Int = 0
     val REQUEST_IMAGE_CAPTURE = 1
     var editFamilyMemberObject: BEFMember? = null
+    val TAG = "xyz"
+    private val PERMISSION_REQUEST_CODE = 1
+    val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE = 101
+    var picturePath = ""
+    var mFile: File? = null
 
     val db = FamilyMembersDB()
 
@@ -125,4 +130,79 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         intent.data = Uri.parse("smsto:$FMPhone")
         startActivity(intent)
     }
+
+
+    fun onTakeByFile(view: View) {
+        mFile = getOutputMediaFile("family_tracker") // create a file to save the image
+
+        if (mFile == null) {
+            Toast.makeText(this, "Could not create file...", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        // create Intent to take a picture
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        // Add extra to inform the app where to put the image.
+        val applicationId = "easv.familiytracker"
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(
+            this,
+            "${applicationId}.provider",  //use your app signature + ".provider"
+            mFile!!))
+
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE)
+
+    }
+
+    private fun getOutputMediaFile(folder: String): File? {
+        // in an emulated device you can see the external files in /sdcard/Android/data/<your app>.
+        val mediaStorageDir = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), folder)
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(TAG, "failed to create directory")
+                return null
+            }
+        }
+
+        // Create a media file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val postfix = "jpg"
+        val prefix = "IMG"
+        return File(mediaStorageDir.path +
+                File.separator + prefix +
+                "_" + timeStamp + "." + postfix)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val mImage = findViewById<ImageView>(R.id.FamilyMemberImage)
+        val tvImageInfo = findViewById<TextView>(R.id.tvImageInfo)
+        when (requestCode) {
+
+            CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE ->
+                if (resultCode == RESULT_OK)
+                    showImageFromFile(mImage, tvImageInfo, mFile!!)
+
+                else handleOther(resultCode)
+
+
+        }
+    }
+
+    private fun showImageFromFile(img: ImageView, txt: TextView, f: File) {
+        img.setImageURI(Uri.fromFile(f))
+        img.setBackgroundColor(Color.RED)
+        picturePath = f.absolutePath
+        //mImage.setRotation(90);
+        txt.text = "File at:" + f.absolutePath
+
+    }
+
+    private fun handleOther(resultCode: Int) {
+        if (resultCode == RESULT_CANCELED)
+            Toast.makeText(this, "Canceled...", Toast.LENGTH_LONG).show()
+        else Toast.makeText(this, "Picture NOT taken - unknown error...", Toast.LENGTH_LONG).show()
+    }
+
 }
