@@ -51,8 +51,9 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         val FMPhone = intent.getStringExtra("Extra_Phone").toString()
         val FMId = intent.getStringExtra("Extra_Id").toString()
         val FMLatLong = intent.getStringExtra("Extra_location").toString()
+        val FMPicture = intent.getStringExtra("Extra_Picture").toString()
 
-        val currentFM = FamilyMembersDB.FamilyMember(FMId, FMName, FMPhone, "", "")
+        val currentFM = FamilyMembersDB.FamilyMember(FMId, FMName, FMPhone, FMPicture, "")
 
         val btnSave = findViewById<Button>(R.id.SaveFamilyMemberButton)
         val btnBack = findViewById<Button>(R.id.GoBackButton)
@@ -60,6 +61,14 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         val btnSMS = findViewById<Button>(R.id.FamilyMemberSMSButton)
         val btnDelete = findViewById<Button>(R.id.DeleteFamilyMemberButton)
         val btnLocation = findViewById<Button>(R.id.FamilyMemberLocationButton)
+        val picture = findViewById<ImageView>(R.id.FamilyMemberImage)
+
+        val uri = Uri.parse(FMPicture)
+
+        if (FMPicture.equals("")) {
+            picture.setImageResource(R.drawable.defaultpic)
+        } else
+            picture.setImageURI(uri)
 
         val FMNameEditText = findViewById<EditText>(R.id.FamilyMemberName)
         val FMPhoneNumberEditText = findViewById<EditText>(R.id.FamilyMemberPhone)
@@ -195,8 +204,6 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         img.setBackgroundColor(Color.RED)
         picturePath = f.absolutePath
         //mImage.setRotation(90);
-        txt.text = "File at:" + f.absolutePath
-
     }
 
     private fun handleOther(resultCode: Int) {
