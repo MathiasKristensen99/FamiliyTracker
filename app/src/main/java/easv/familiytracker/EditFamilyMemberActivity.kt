@@ -113,7 +113,7 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         val FMPhoneNumberEditText = findViewById<EditText>(R.id.FamilyMemberPhone)
         val FMId = intent.getStringExtra("Extra_Id").toString()
 
-        db.updateMember(FMId, FMNameEditText.text.toString(), FMPhoneNumberEditText.text.toString(), "", "")
+        db.updateMember(FMId, FMNameEditText.text.toString(), FMPhoneNumberEditText.text.toString(), picturePath, "55.465,8.44995")
         finish()
     }
 

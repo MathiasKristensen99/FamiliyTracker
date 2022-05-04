@@ -132,7 +132,7 @@ class FMemberDetailActivity : AppCompatActivity() {
         val txtPhone = findViewById<EditText>(R.id.FamilyMemberPhone)
 
 
-        db.createMember(txtName.text.toString(), txtPhone.text.toString(), picturePath, "")
+        db.createMember(txtName.text.toString(), txtPhone.text.toString(), picturePath, "55.465,8.44995")
         finish()
     }
 
