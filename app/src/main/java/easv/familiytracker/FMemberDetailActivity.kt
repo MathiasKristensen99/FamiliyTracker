@@ -28,6 +28,7 @@ class FMemberDetailActivity : AppCompatActivity() {
     private val PERMISSION_REQUEST_CODE = 1
     val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE = 101
     val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 102
+    var picturePath = ""
 
     var mFile: File? = null
 
@@ -131,7 +132,7 @@ class FMemberDetailActivity : AppCompatActivity() {
         val txtPhone = findViewById<EditText>(R.id.FamilyMemberPhone)
 
 
-        db.createMember(txtName.text.toString(), txtPhone.text.toString(), "", "")
+        db.createMember(txtName.text.toString(), txtPhone.text.toString(), picturePath, "")
         finish()
     }
 
@@ -170,6 +171,7 @@ class FMemberDetailActivity : AppCompatActivity() {
             CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE ->
                 if (resultCode == RESULT_OK)
                     showImageFromFile(mImage, tvImageInfo, mFile!!)
+
                 else handleOther(resultCode)
 
             CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP ->
@@ -184,8 +186,9 @@ class FMemberDetailActivity : AppCompatActivity() {
     private fun showImageFromFile(img: ImageView, txt: TextView, f: File) {
         img.setImageURI(Uri.fromFile(f))
         img.setBackgroundColor(Color.RED)
+        picturePath = f.absolutePath
         //mImage.setRotation(90);
-        txt.text = "File at:" + f.absolutePath + " - size = " + f.length()
+        txt.text = "File at:" + f.absolutePath
 
     }
 

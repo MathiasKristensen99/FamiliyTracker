@@ -1,6 +1,7 @@
 package easv.familiytracker
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +23,17 @@ class FMemberAdapter (context: Context, private val fmembers: Array<BEFMember>) 
         val f = fmembers[position]
         val nameView = resView.findViewById<TextView>(R.id.txtName)
         val phoneView = resView.findViewById<TextView>(R.id.txtPhone)
+        val profilePic = resView.findViewById<ImageView>(R.id.imgProfilePic)
+
         nameView.text = f.name
         phoneView.text = f.phone
+
+        val uri = Uri.parse(f.picture)
+
+        if (f.picture.equals("")) {
+            profilePic.setImageResource(R.drawable.defaultpic)
+        } else
+            profilePic.setImageURI(uri)
 
         return resView
 

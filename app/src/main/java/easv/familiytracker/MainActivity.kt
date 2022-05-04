@@ -59,11 +59,13 @@ class MainActivity : AppCompatActivity() {
             val familyMemberId = adapter.getItem(id.toInt())?.id
             val familyMemberName = adapter.getItem(id.toInt())?.name
             val familyMemberPhone = adapter.getItem(id.toInt())?.phone
+            val familyMemberPicture = adapter.getItem(id.toInt())?.picture
             val familyMemberLocation = adapter.getItem(id.toInt())?.location
             val FMIBundle = Bundle()
             FMIBundle.putString("Extra_Name", familyMemberName.toString())
             FMIBundle.putString("Extra_Phone", familyMemberPhone.toString())
             FMIBundle.putString("Extra_Id", familyMemberId.toString())
+            FMIBundle.putString("Extra_Picture", familyMemberPicture.toString())
             FMIBundle.putString("Extra_location", familyMemberLocation.toString())
 
             val i = Intent(this, EditFamilyMemberActivity::class.java)
