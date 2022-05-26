@@ -74,6 +74,8 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         val FMPhoneNumberEditText = findViewById<EditText>(R.id.FamilyMemberPhone)
         setFMValues(FMNameEditText, FMName, FMPhoneNumberEditText, FMPhone)
 
+        checkPermissions();
+
         btnSMS.setOnClickListener { sendSMS() }
         btnBack.setOnClickListener { finish() }
         btnCall.setOnClickListener { openDialer() }
@@ -106,6 +108,18 @@ class EditFamilyMemberActivity: AppCompatActivity() {
         i.putExtras(FMBundle)
         startActivity(i)
     }
+
+    private fun checkPermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+        val permissions = mutableListOf<String>()
+        if ( ! isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE) ) permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if ( ! isGranted(Manifest.permission.CAMERA) ) permissions.add(Manifest.permission.CAMERA)
+        if (permissions.size > 0)
+            ActivityCompat.requestPermissions(this, permissions.toTypedArray(), PERMISSION_REQUEST_CODE)
+    }
+
+    private fun isGranted(permission: String): Boolean =
+        ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
     fun deleteMemberById(id : String, name : String, phone : String){
         db.deleteMember(id, name, phone, "", "")
